@@ -220,7 +220,14 @@ public class ArvoreBinaria {
         if(raiz.esq != null){
             inOrdem(raiz.esq);
         }
-
+        /*count++;
+        raiz.posInOrdemSimetrica = count;
+        if(count == qntNos){
+            count = 0;
+        }
+        if(raiz.posInOrdemSimetrica == n){
+            return raiz.valor;
+        }*/
         this.arvoreOrdemSimetrica.add(raiz.valor);
 
         if(raiz.dir != null){
@@ -234,6 +241,7 @@ public class ArvoreBinaria {
     }
 
     public int enesimoElemento(int n){
+        arvoreOrdemSimetrica.clear();
         inOrdem(this.raiz);
         return arvoreOrdemSimetrica.get(n-1);
     }

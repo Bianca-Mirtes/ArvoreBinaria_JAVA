@@ -5,6 +5,7 @@ public class No {
     public No esq;
     public No dir;
     public int altura;
+    public int posInOrdemSimetrica;
 
     public No(int valor){
         this.valor = valor;
