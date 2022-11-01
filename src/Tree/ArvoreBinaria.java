@@ -6,14 +6,15 @@ import java.util.Queue;
 public class ArvoreBinaria {
     private No raiz = null;
     private int qntNos = 0;
-    private LinkedList<Integer> arvoreOrdemSimetrica = new LinkedList<>();
     private String arvorePreOrdem = "";
+    private int count = 0;
 
     public ArvoreBinaria(String arvoreInicial){
         String[] str = arvoreInicial.split(" ");
         for(int ii=0; ii < str.length; ii++){
             if(ii == 0){
-                this.raiz = new No(Integer.parseInt(str[ii]));  
+                this.raiz = new No(Integer.parseInt(str[ii]));
+                qntNos++;
             }else{
                 No atual = raiz;
                 No anterior = null;
@@ -220,18 +221,13 @@ public class ArvoreBinaria {
         if(raiz.esq != null){
             inOrdem(raiz.esq);
         }
-        /*count++;
+        count++;
         raiz.posInOrdemSimetrica = count;
-        if(count == qntNos){
-            count = 0;
-        }
-        if(raiz.posInOrdemSimetrica == n){
-            return raiz.valor;
-        }*/
-        this.arvoreOrdemSimetrica.add(raiz.valor);
-
         if(raiz.dir != null){
             inOrdem(raiz.dir);
+        }
+        if(count == qntNos){
+            count = 0;
         }
     }
 
@@ -241,8 +237,42 @@ public class ArvoreBinaria {
     }
 
     public int enesimoElemento(int n){
-        arvoreOrdemSimetrica.clear();
         inOrdem(this.raiz);
-        return arvoreOrdemSimetrica.get(n-1);
+        No atual = this.raiz;
+        while(atual.posInOrdemSimetrica != n){
+            if(atual != null){
+                if(n > atual.posInOrdemSimetrica){
+                    atual = atual.dir;
+                }else{
+                    atual = atual.esq;
+                }
+            }
+            if(atual == null){
+                return -1;
+            }
+        }
+        return atual.valor;
+    }
+
+    public int posicao(int valor){
+        if(raiz == null){
+            return -1;
+        }else{
+            No atual = raiz;
+            while(atual.valor != valor){
+                if(atual != null){
+                    if(valor > atual.valor){
+                        atual = atual.dir;
+                    }else{
+                        atual = atual.esq;
+                    }
+                }
+                if(atual == null){
+                    return -1;
+                }
+            }
+            System.out.println("Chave encontrada");
+            return atual.posInOrdemSimetrica; 
+        }
     }
 }
