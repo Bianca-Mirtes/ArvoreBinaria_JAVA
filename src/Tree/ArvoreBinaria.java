@@ -3,27 +3,29 @@ package Tree;
 import java.util.LinkedList;
 import java.util.Queue;
 
+
 public class ArvoreBinaria {
     private No raiz = null;
     private int qntNos = 0;
     private String arvorePreOrdem = "";
-    private int count = 0;
+    private int niveis = 1;
 
     public ArvoreBinaria(String arvoreInicial){
         String[] str = arvoreInicial.split(" ");
         for(int ii=0; ii < str.length; ii++){
             if(ii == 0){
                 this.raiz = new No(Integer.parseInt(str[ii]));
+                this.raiz.nivel = niveis++;
                 qntNos++;
             }else{
                 No atual = raiz;
                 No anterior = null;
                 while(atual != null){
                     anterior = atual;
-                    if( Integer.parseInt(str[ii]) == atual.valor){
+                    if(Integer.parseInt(str[ii]) == atual.valor){ // valor repetido
                         return;
                     }
-                    if(Integer.parseInt(str[ii]) < atual.valor){
+                    if(Integer.parseInt(str[ii]) < atual.valor){ // andar na arvore
                         atual = atual.esq;
                     }else{
                         atual = atual.dir;
@@ -31,14 +33,52 @@ public class ArvoreBinaria {
                 }
                 if(Integer.parseInt(str[ii]) < anterior.valor){
                     anterior.esq = new No(Integer.parseInt(str[ii]));
+                    anterior.esq.nivel = niveis;
+                    if(anterior.dir != null){
+                        this.niveis++;
+                    }
                     qntNos++;
                 }else{
                     anterior.dir = new No(Integer.parseInt(str[ii]));
+                    anterior.dir.nivel = niveis;
+                    if(anterior.esq != null){
+                        this.niveis++;
+                    }
                     qntNos++;
                 }
             }   
         }
     };
+
+    public int calculaAltura(No raiz){
+        Queue<No> nosPorLevel = new LinkedList<>();
+        int altura = 0;
+        int qntNos = 0;
+        No atual; 
+        if (raiz == null) {
+            return 0;
+        }
+        nosPorLevel.add(raiz);
+        while(true){
+            qntNos = nosPorLevel.size();
+            if(qntNos == 0){
+                return altura;
+            }
+            altura++;
+            while (qntNos > 0){
+                atual = nosPorLevel.peek();
+                nosPorLevel.remove();
+                if (atual.esq != null) {
+                    nosPorLevel.add(atual.esq);
+                }
+    
+                if (atual.dir != null) {
+                    nosPorLevel.add(atual.dir);
+                }
+                qntNos--;
+            }
+        }
+    }
 
     public No getRaiz() {
         return raiz;
@@ -65,9 +105,17 @@ public class ArvoreBinaria {
             }
             if(valor < anterior.valor){
                 anterior.esq = new No(valor);
+                anterior.esq.nivel = niveis;
+                if(anterior.dir != null){
+                    this.niveis++;
+                }
                 qntNos++;
             }else{
                 anterior.dir = new No(valor);
+                anterior.dir.nivel = niveis;
+                if(anterior.esq != null){
+                    this.niveis++;
+                }
                 qntNos++;
             }
             System.out.println(valor + " adicionado");
@@ -148,10 +196,31 @@ public class ArvoreBinaria {
         return temp2;
     }
 
-    public void imprimeArvore(int s){
-        int count = qntNos*10;
-        if(s == 1){
+    private void diagramaBarras(No raiz, String espacamento){
+        if(raiz != null){
+            System.out.print(espacamento + raiz.valor);
+            for(int ii=0; ii < qntNos*4 - espacamento.length(); ii++){
+                if(ii == qntNos*4 - espacamento.length() - 1){
+                    System.out.print("-\n");
+                }else{
+                    System.out.print("-");
+                }
+            }
+            diagramaBarras(raiz.esq, espacamento+"   ");
+            diagramaBarras(raiz.dir, espacamento+"   ");
         }else{
+            return;
+        }
+    }
+
+    private void parentesesAninhados(No raiz){ // larguei de mão, consegui o de barras!!!!
+    }
+
+    public void imprimeArvore(int s){
+        if(s == 1){
+            diagramaBarras(raiz, "");
+        }else{
+            parentesesAninhados(raiz);
         }
     }
 
@@ -159,31 +228,13 @@ public class ArvoreBinaria {
         if(this.raiz == null){
             return true;
         }
-        Queue<No> fila = new LinkedList<>();
-
-        boolean noIncompleto = false;
-        fila.add(this.raiz);
-        while(!fila.isEmpty()){
-            No temp = fila.remove();
-            if(temp.esq != null){
-                if(noIncompleto == true){ // significa que um nó incompleto já foi encontrado
-                    return false;
-                }
-                fila.add(temp.esq);
-            }else{
-                noIncompleto = true;
-            }
-            if(temp.dir != null){
-                if(noIncompleto == true){ // significa que um nó incompleto já foi encontrado
-                    return false;
-                }
-                fila.add(temp.dir);
-            }else{
-                noIncompleto = true;
-            }
+        int altura = calculaAltura(this.raiz);
+        if(Math.pow(2, altura-1) <= qntNos && qntNos <= (Math.pow(2, altura) - 1)){
+            return true;
         }
-        return true;
+        return false;
     }
+
     public boolean ehCheia(){
         if(this.raiz == null){
             return true;
@@ -207,6 +258,17 @@ public class ArvoreBinaria {
         return true;
     };
 
+    public void imprimeNiveis(No raiz, int nivel){
+        if (raiz == null)
+            return;
+        if (nivel == 1)
+            System.out.print(raiz.valor + " ");
+        else if (nivel > 1) {
+            imprimeNiveis(raiz.esq, nivel - 1);
+            imprimeNiveis(raiz.dir, nivel - 1);
+        }
+    }
+
     private void preOrdem(No raiz){ /*complexidade O(n), percorre todos os nós*/
         arvorePreOrdem += raiz.valor + " "; 
         if(raiz.esq != null){
@@ -217,17 +279,14 @@ public class ArvoreBinaria {
         }
     }
 
-    private void inOrdem(No raiz){
+    public void inOrdem(No raiz){
         if(raiz.esq != null){
             inOrdem(raiz.esq);
         }
-        count++;
-        raiz.posInOrdemSimetrica = count;
+        System.out.println(raiz.valor + " " + raiz.nivel);
+
         if(raiz.dir != null){
             inOrdem(raiz.dir);
-        }
-        if(count == qntNos){
-            count = 0;
         }
     }
 
@@ -236,7 +295,7 @@ public class ArvoreBinaria {
         return arvorePreOrdem;
     }
 
-    public int enesimoElemento(int n){
+    /*public int enesimoElemento(int n){
         inOrdem(this.raiz);
         No atual = this.raiz;
         while(atual.posInOrdemSimetrica != n){
@@ -252,7 +311,7 @@ public class ArvoreBinaria {
             }
         }
         return atual.valor;
-    }
+    }*/
 
     public int posicao(int valor){
         if(raiz == null){
@@ -272,7 +331,7 @@ public class ArvoreBinaria {
                 }
             }
             System.out.println("Chave encontrada");
-            return atual.posInOrdemSimetrica; 
+            return -1;//atual.posInOrdemSimetrica; 
         }
     }
 }

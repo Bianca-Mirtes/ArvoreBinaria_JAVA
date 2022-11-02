@@ -19,7 +19,7 @@ public class App {
                 String comando = dado.split(" ")[0];
                 int valor = Integer.parseInt(dado.split(" ")[1]);
                 if(comando.equals("ENESIMO")){
-                    System.out.println(arvore.enesimoElemento(valor));
+                    //System.out.println(arvore.enesimoElemento(valor));
                 }else if(comando.equals("INSIRA")){
                     arvore.inserirABB(valor);
                 }else if(comando.equals("REMOVA")){
@@ -28,17 +28,13 @@ public class App {
                     arvore.buscaABB(valor);
                 }else if(comando.equals("POSICAO")){
 
-                }else if(comando == "IMPRIMA"){
-                    if(valor == 1){
-
-                    }else{
-
-                    }
+                }else if(comando.equals("IMPRIMA")){
+                    arvore.imprimeArvore(valor);
                 }
             }else{
                 String comando = dado.split(" ")[0];
                 if(comando.equals("CHEIA")){
-                    if(arvore.ehCheia()){ // Tudo certo!!!
+                    if(arvore.ehCheia()){
                         System.out.println("A arvore é cheia.");
                     }else{
                         System.out.println("A arvore não é cheia.");
@@ -48,7 +44,7 @@ public class App {
                 }else if(comando.equals("PREORDEM")){
                     System.out.println(arvore.pre_ordem());
                 }else if(comando.equals("COMPLETA")){
-                    if(arvore.ehCompleta()){ // tá dando errado esse metodo, devo ter implementado errado!!!
+                    if(arvore.ehCompleta()){
                         System.out.println("A arvore é completa.");
                     }else{
                         System.out.println("A arvore não é completa.");
