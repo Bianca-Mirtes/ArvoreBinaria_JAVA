@@ -46,7 +46,7 @@ public class ArvoreBinaria {
                     }
                     qntNos++;
                 }
-            }   
+            }  
         }
     };
 
@@ -214,6 +214,7 @@ public class ArvoreBinaria {
     }
 
     private void parentesesAninhados(No raiz){ // larguei de mão, consegui o de barras!!!!
+        
     }
 
     public void imprimeArvore(int s){

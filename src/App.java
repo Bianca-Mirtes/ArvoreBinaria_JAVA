@@ -8,8 +8,8 @@ import java.util.List;
 
 public class App {
     public static void main(String[] args) throws IOException {
-        Path path1 = Paths.get("src/entradas/input1.txt");
-        Path path2 = Paths.get("src/entradas/input2.txt");
+        Path path1 = Paths.get(args[0]);
+        Path path2 = Paths.get(args[1]);
 
         ArvoreBinaria arvore = new ArvoreBinaria(Files.readAllLines(path1).get(0));
 
