@@ -19,7 +19,7 @@ public class App {
                 String comando = dado.split(" ")[0];
                 int valor = Integer.parseInt(dado.split(" ")[1]);
                 if(comando.equals("ENESIMO")){
-                    //System.out.println(arvore.enesimoElemento(valor));
+                    System.out.println(arvore.enesimoElemento(valor));
                 }else if(comando.equals("INSIRA")){
                     arvore.inserirABB(valor);
                 }else if(comando.equals("REMOVA")){
@@ -27,9 +27,11 @@ public class App {
                 }else if(comando.equals("BUSCAR")){
                     arvore.buscaABB(valor);
                 }else if(comando.equals("POSICAO")){
-
+                    System.out.println(arvore.posicao(valor));
                 }else if(comando.equals("IMPRIMA")){
                     arvore.imprimeArvore(valor);
+                }else if(comando.equals("MEDIA")){
+                    System.out.println(arvore.media(valor));
                 }
             }else{
                 String comando = dado.split(" ")[0];
@@ -40,7 +42,7 @@ public class App {
                         System.out.println("A arvore não é cheia.");
                     }
                 }else if(comando.equals("MEDIANA")){
-
+                    System.out.println(arvore.mediana());
                 }else if(comando.equals("PREORDEM")){
                     System.out.println(arvore.pre_ordem());
                 }else if(comando.equals("COMPLETA")){

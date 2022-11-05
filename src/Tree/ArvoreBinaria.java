@@ -2,20 +2,23 @@ package Tree;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Stack;
 
 
 public class ArvoreBinaria {
     private No raiz = null;
     private int qntNos = 0;
     private String arvorePreOrdem = "";
-    private int niveis = 1;
+    private int posNoInOrdem = 0;
+    private int countInOrdem = 0;
+    private int elemNoInOrdem = 0;
+    private double mediana = 0;
 
     public ArvoreBinaria(String arvoreInicial){
         String[] str = arvoreInicial.split(" ");
         for(int ii=0; ii < str.length; ii++){
             if(ii == 0){
                 this.raiz = new No(Integer.parseInt(str[ii]));
-                this.raiz.nivel = niveis++;
                 qntNos++;
             }else{
                 No atual = raiz;
@@ -33,17 +36,9 @@ public class ArvoreBinaria {
                 }
                 if(Integer.parseInt(str[ii]) < anterior.valor){
                     anterior.esq = new No(Integer.parseInt(str[ii]));
-                    anterior.esq.nivel = niveis;
-                    if(anterior.dir != null){
-                        this.niveis++;
-                    }
                     qntNos++;
                 }else{
                     anterior.dir = new No(Integer.parseInt(str[ii]));
-                    anterior.dir.nivel = niveis;
-                    if(anterior.esq != null){
-                        this.niveis++;
-                    }
                     qntNos++;
                 }
             }  
@@ -94,7 +89,7 @@ public class ArvoreBinaria {
             while(atual != null){
                 anterior = atual;
                 if(valor == atual.valor){ // o valor já existe na arvore
-                    System.out.println(valor + " já está na arvore, não pode ser inserido.");
+                    System.out.println(valor + " já está na árvore, não pode ser inserido");
                     return;
                 }
                 if(valor < atual.valor){
@@ -105,17 +100,9 @@ public class ArvoreBinaria {
             }
             if(valor < anterior.valor){
                 anterior.esq = new No(valor);
-                anterior.esq.nivel = niveis;
-                if(anterior.dir != null){
-                    this.niveis++;
-                }
                 qntNos++;
             }else{
                 anterior.dir = new No(valor);
-                anterior.dir.nivel = niveis;
-                if(anterior.esq != null){
-                    this.niveis++;
-                }
                 qntNos++;
             }
             System.out.println(valor + " adicionado");
@@ -173,13 +160,17 @@ public class ArvoreBinaria {
                 atual = atual.esq;
             }
         }
-        System.out.println(valor + " não está na arvore, não pode ser removido");
+        System.out.println(valor + " não está na árvore, não pode ser removido");
     }
 
     private No removeNo(No atual){
         No temp1, temp2;
         if(atual.esq == null){
             temp2 = atual.dir;
+            return temp2;
+        }
+        if(atual.dir == null){
+            temp2 = atual.esq;
             return temp2;
         }
         temp1 = atual;
@@ -245,11 +236,9 @@ public class ArvoreBinaria {
         while(!fila.isEmpty()){
             No temp = fila.peek();
             fila.remove();
-     
             if (temp.esq == null && temp.dir == null){ // é uma folha, ignora
                 continue;
             }
-     
             if (temp.esq == null ^ temp.dir == null){
                 return false;
             }
@@ -259,80 +248,113 @@ public class ArvoreBinaria {
         return true;
     };
 
-    public void imprimeNiveis(No raiz, int nivel){
-        if (raiz == null)
-            return;
-        if (nivel == 1)
-            System.out.print(raiz.valor + " ");
-        else if (nivel > 1) {
-            imprimeNiveis(raiz.esq, nivel - 1);
-            imprimeNiveis(raiz.dir, nivel - 1);
-        }
-    }
-
-    private void preOrdem(No raiz){ /*complexidade O(n), percorre todos os nós*/
-        arvorePreOrdem += raiz.valor + " "; 
+    private String preOrdem(No raiz){
+        this.arvorePreOrdem += raiz.valor + " ";
         if(raiz.esq != null){
             preOrdem(raiz.esq);
         }
         if(raiz.dir != null){
             preOrdem(raiz.dir);
         }
+        return this.arvorePreOrdem;
     }
 
-    public void inOrdem(No raiz){
+    public void PosInOrdem(No raiz, int valor, int verif){
         if(raiz.esq != null){
-            inOrdem(raiz.esq);
+            PosInOrdem(raiz.esq, valor, verif);
         }
-        System.out.println(raiz.valor + " " + raiz.nivel);
-
+        countInOrdem++;
+        raiz.posInOrdem = countInOrdem;
+        if(verif == 2){
+            if(raiz.valor == valor){
+                posNoInOrdem = raiz.posInOrdem;
+            }   
+        }else if(verif == 3){
+            if(raiz.posInOrdem == valor){
+                elemNoInOrdem = raiz.valor;
+            }
+        }else{
+            if(qntNos % 2 == 0){
+                if(raiz.posInOrdem == qntNos / 2){
+                    this.mediana += raiz.valor;
+                }
+                if(raiz.posInOrdem == (qntNos / 2) + 1){
+                    if(mediana > raiz.valor){
+                        this.mediana = raiz.valor;
+                    }
+                }
+            }else{
+                if(raiz.posInOrdem == ((qntNos / 2) + 1)){
+                    this.mediana = raiz.valor;
+                }
+            }
+        }
         if(raiz.dir != null){
-            inOrdem(raiz.dir);
+            PosInOrdem(raiz.dir, valor, verif);
+        }
+        if(countInOrdem == qntNos){
+            countInOrdem = 0;
         }
     }
 
     public String pre_ordem(){
-        preOrdem(raiz);
-        return arvorePreOrdem;
+        if(this.arvorePreOrdem.length() != 0){
+            this.arvorePreOrdem = "";
+        }
+        return preOrdem(raiz);
     }
 
-    /*public int enesimoElemento(int n){
-        inOrdem(this.raiz);
+    public int enesimoElemento(int n){
+        if(raiz == null){
+            return 0;
+        }
+        PosInOrdem(this.raiz, n, 3);
+        return this.elemNoInOrdem;
+    }
+
+    public int posicao(int valor){
+        if(raiz == null){
+            return 0;
+        }
+        PosInOrdem(this.raiz, valor, 2);
+        return this.posNoInOrdem;
+    }
+
+    public double mediana(){
+        this.mediana = 0;
+        PosInOrdem(this.raiz, -1, 4);
+        return this.mediana;
+    }
+
+    public double media(int elemento){
+        int nos = 0;
+        double soma = 0;
         No atual = this.raiz;
-        while(atual.posInOrdemSimetrica != n){
+        while(atual.valor != elemento){
             if(atual != null){
-                if(n > atual.posInOrdemSimetrica){
+                if(elemento > atual.valor){
                     atual = atual.dir;
                 }else{
                     atual = atual.esq;
                 }
             }
             if(atual == null){
-                return -1;
+                return 0;
             }
         }
-        return atual.valor;
-    }*/
-
-    public int posicao(int valor){
-        if(raiz == null){
-            return -1;
-        }else{
-            No atual = raiz;
-            while(atual.valor != valor){
-                if(atual != null){
-                    if(valor > atual.valor){
-                        atual = atual.dir;
-                    }else{
-                        atual = atual.esq;
-                    }
-                }
-                if(atual == null){
-                    return -1;
-                }
+        Stack<No> pilha = new Stack<>();
+        pilha.push(atual);
+        while(!pilha.empty()){
+            No temp = pilha.pop();
+            soma += temp.valor;
+            nos++;
+            if(temp.dir != null){
+                pilha.push(temp.dir);
             }
-            System.out.println("Chave encontrada");
-            return -1;//atual.posInOrdemSimetrica; 
+            if(temp.esq != null){
+                pilha.push(temp.esq);
+            }         
         }
+        return soma / nos;
     }
 }
