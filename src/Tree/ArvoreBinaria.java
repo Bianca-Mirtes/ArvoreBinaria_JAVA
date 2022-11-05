@@ -209,7 +209,13 @@ public class ArvoreBinaria {
         pilha.add(raiz);
         while (!pilha.isEmpty()) {
             No atual = pilha.pop();
-            System.out.print("("+atual.valor);
+            
+            if (atual.esq == null) {
+                System.out.print("("+atual.valor);
+            } else {
+                System.out.print("("+atual.valor+" ");
+            }
+
             if (atual.esq != null) {
                 parentesesAninhados(atual.esq);
             }
