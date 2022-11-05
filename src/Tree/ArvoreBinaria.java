@@ -205,7 +205,19 @@ public class ArvoreBinaria {
     }
 
     private void parentesesAninhados(No raiz){ // larguei de mão, consegui o de barras!!!!
-        
+        Stack<No> pilha = new Stack<>();
+        pilha.add(raiz);
+        while (!pilha.isEmpty()) {
+            No atual = pilha.pop();
+            System.out.print("("+atual.valor);
+            if (atual.esq != null) {
+                parentesesAninhados(atual.esq);
+            }
+            if (atual.dir != null) {
+                parentesesAninhados(atual.dir);
+            }
+            System.out.print(")");
+        }
     }
 
     public void imprimeArvore(int s){
@@ -213,6 +225,7 @@ public class ArvoreBinaria {
             diagramaBarras(raiz, "");
         }else{
             parentesesAninhados(raiz);
+            System.out.println();
         }
     }
 

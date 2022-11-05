@@ -12,8 +12,8 @@ public class App {
         Path path2 = Paths.get(args[1]);
 
         ArvoreBinaria arvore = new ArvoreBinaria(Files.readAllLines(path1).get(0));
-
         List<String> comandos = Files.readAllLines(path2);
+
         for(var dado : comandos){
             if(dado.contains(" ")){
                 String comando = dado.split(" ")[0];
