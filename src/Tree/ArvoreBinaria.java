@@ -190,15 +190,15 @@ public class ArvoreBinaria {
     private void diagramaBarras(No raiz, String espacamento){
         if(raiz != null){
             System.out.print(espacamento + raiz.valor);
-            for(int ii=0; ii < qntNos*4 - espacamento.length(); ii++){
-                if(ii == qntNos*4 - espacamento.length() - 1){
+            for(int ii=0; ii < 36 - espacamento.length() - Integer.toString(raiz.valor).length(); ii++){
+                if(ii == 36 - espacamento.length() - Integer.toString(raiz.valor).length() - 1){
                     System.out.print("-\n");
                 }else{
                     System.out.print("-");
                 }
             }
-            diagramaBarras(raiz.esq, espacamento+"   ");
-            diagramaBarras(raiz.dir, espacamento+"   ");
+            diagramaBarras(raiz.esq, espacamento+"    ");
+            diagramaBarras(raiz.dir, espacamento+"    ");
         }else{
             return;
         }
