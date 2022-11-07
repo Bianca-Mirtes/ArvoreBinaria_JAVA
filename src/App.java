@@ -37,9 +37,9 @@ public class App {
                 String comando = dado.split(" ")[0];
                 if(comando.equals("CHEIA")){
                     if(arvore.ehCheia()){
-                        System.out.println("A arvore é cheia.");
+                        System.out.println("A árvore é cheia");
                     }else{
-                        System.out.println("A arvore não é cheia.");
+                        System.out.println("A árvore não é cheia");
                     }
                 }else if(comando.equals("MEDIANA")){
                     System.out.println(arvore.mediana());
@@ -47,9 +47,9 @@ public class App {
                     System.out.println(arvore.pre_ordem());
                 }else if(comando.equals("COMPLETA")){
                     if(arvore.ehCompleta()){
-                        System.out.println("A arvore é completa.");
+                        System.out.println("A árvore é completa");
                     }else{
-                        System.out.println("A arvore não é completa.");
+                        System.out.println("A árvore não é completa");
                     }
                 }
             }

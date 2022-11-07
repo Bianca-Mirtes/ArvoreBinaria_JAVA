@@ -6,21 +6,21 @@ import java.util.Stack;
 
 
 public class ArvoreBinaria {
-    private No raiz = null;
-    private int qntNos = 0;
-    private String arvorePreOrdem = "";
-    private int posNoInOrdem = 0;
-    private int countInOrdem = 0;
-    private int elemNoInOrdem = 0;
-    private double mediana = 0;
+    private No raiz = null;     // raiz da arvore
+    private int qntNos = 0;     // quantidade de nós da arvore
+    private String arvorePreOrdem = ""; // arvore organizada no percurso em pré-ordem
+    private int posNoInOrdem = 0;   // posição de um elemento na arvore no percuso em ordem simetrica
+    private int countInOrdem = 0;   // contador para definir a posição de cada nó no percuso em ordem simetrica
+    private int elemNoInOrdem = 0;  // elemento em uma determinada posição da arvore no percuso em ordem simetrica
+    private double mediana = 0;     // valor central da arvore no percuso em ordem simetrica
 
-    public ArvoreBinaria(String arvoreInicial){
-        String[] str = arvoreInicial.split(" ");
+    public ArvoreBinaria(String arvoreInicial){ // responsavel por construir a arvore binaria inicial
+        String[] str = arvoreInicial.split(" "); // String contendo a arvore binaria inicial
         for(int ii=0; ii < str.length; ii++){
-            if(ii == 0){
+            if(ii == 0){ // criação da raiz
                 this.raiz = new No(Integer.parseInt(str[ii]));
                 qntNos++;
-            }else{
+            }else{ // demais nós
                 No atual = raiz;
                 No anterior = null;
                 while(atual != null){
@@ -34,10 +34,10 @@ public class ArvoreBinaria {
                         atual = atual.dir;
                     }
                 }
-                if(Integer.parseInt(str[ii]) < anterior.valor){
+                if(Integer.parseInt(str[ii]) < anterior.valor){ // inserção do novo nó à esquerda
                     anterior.esq = new No(Integer.parseInt(str[ii]));
                     qntNos++;
-                }else{
+                }else{ // inserção do novo nó à direita
                     anterior.dir = new No(Integer.parseInt(str[ii]));
                     qntNos++;
                 }
@@ -45,22 +45,22 @@ public class ArvoreBinaria {
         }
     };
 
-    private int calculaAltura(No raiz){
+    private int calculaAltura(No raiz){ // retorna a altura da arvore
         if (raiz == null) {
             return 0;
         }
-        Queue<No> nosPorLevel = new LinkedList<>();
+        Queue<No> nosPorLevel = new LinkedList<>(); // fila para fazer o percurso em nivel
         int altura = 0;
         int quantidadeNos = 0;
         No atual; 
         nosPorLevel.add(raiz);
         while(true){
             quantidadeNos = nosPorLevel.size();
-            if(quantidadeNos == 0){
+            if(quantidadeNos == 0){ // chegou ao final da arvore
                 return altura;
             }
             altura++;
-            while (quantidadeNos > 0){
+            while (quantidadeNos > 0){ // sai quando um nivel foi analisado para a altura e a quantidade de nós serem atualizadas
                 atual = nosPorLevel.peek();
                 nosPorLevel.remove();
                 if (atual.esq != null) {
@@ -75,15 +75,15 @@ public class ArvoreBinaria {
         }
     }
 
-    public No getRaiz() { // O(1)
+    public No getRaiz() { // retorna a raiz da arvore
         return raiz;
     }
 
-    public void inserirABB(int valor){
-        if(raiz == null){
+    public void inserirABB(int valor){ // insere um novo nó à arvore
+        if(raiz == null){ // se true, inicializa a raiz da arvore
             raiz = new No(valor);
             qntNos++;
-        }else{
+        }else{ // busca o local correto para inserir o novo elemento caso não seja um elemento repetido
             No atual = raiz;
             No anterior = null;
             while(atual != null){
@@ -92,16 +92,16 @@ public class ArvoreBinaria {
                     System.out.println(valor + " já está na árvore, não pode ser inserido");
                     return;
                 }
-                if(valor < atual.valor){
+                if(valor < atual.valor){ // andar pela arvore
                     atual = atual.esq;
                 }else{
                     atual = atual.dir;
                 }
             }
-            if(valor < anterior.valor){
+            if(valor < anterior.valor){ // insere o novo valor à esquerda
                 anterior.esq = new No(valor);
                 qntNos++;
-            }else{
+            }else{ // insere o novo nó à direita
                 anterior.dir = new No(valor);
                 qntNos++;
             }
@@ -109,37 +109,37 @@ public class ArvoreBinaria {
         }
     }
 
-    public void buscaABB(int valor){
-        if(raiz == null){
+    public void buscaABB(int valor){ // busca um nó na arvore que armazene o valor
+        if(raiz == null){ // se true, retorna o metodo, pois não há o que buscar
             return;
         }else{
             No atual = this.raiz;
             while(atual.valor != valor){
                 if(atual != null){
-                    if(valor > atual.valor){
+                    if(valor > atual.valor){ // andar pela arvore em busca do nó
                         atual = atual.dir;
                     }else{
                         atual = atual.esq;
                     }
                 }
-                if(atual == null){
+                if(atual == null){ // o nó com esse valor não existe na arvore
                     System.out.println("Chave não encontrada");
                     return;
                 }
             }
-            System.out.println("Chave encontrada");
+            System.out.println("Chave encontrada"); // nó encontrado
             return; 
         }
     }
 
-    public void removerABB(int valor){
-        if(raiz == null){
+    public void removerABB(int valor){ // remove um nó da arvore
+        if(raiz == null){  // se true, retorna o metodo, pois não há o que remover
             return;
         }
         No atual = raiz;
         No anterior = null;
         while(atual != null){
-            if(valor == atual.valor){
+            if(valor == atual.valor){ // Nó foi encontrado e é feito o tratamamento da remoção de acordo com o caso
                 if(atual == raiz){
                     raiz = removeNo(atual);
                 }else{
@@ -153,28 +153,28 @@ public class ArvoreBinaria {
                 qntNos--;
                 return;
             }
-            anterior = atual;
-            if(valor > atual.valor){
+            anterior = atual; 
+            if(valor > atual.valor){ // andar pela arvore em busca do nó a ser removido
                 atual = atual.dir;
             }else{
                 atual = atual.esq;
             }
         }
-        System.out.println(valor + " não está na árvore, não pode ser removido");
+        System.out.println(valor + " não está na árvore, não pode ser removido"); // nó com o valor não foi encontrado
     }
 
-    private No removeNo(No atual){
+    private No removeNo(No atual){ // trata os três casos da remoção em arvore binaria
         No temp1, temp2;
-        if(atual.esq == null){
+        if(atual.esq == null){ // Caso 1 e 2: Nó com 1 filho e nó folha
             temp2 = atual.dir;
             return temp2;
         }
-        if(atual.dir == null){
+        if(atual.dir == null){ // Caso 1 e 2: Nó com 1 filho e nó folha
             temp2 = atual.esq;
             return temp2;
         }
-        temp1 = atual;
-        temp2 = atual.esq;
+        temp1 = atual;      // Caso 3: Nó com 2 filhos. Pega o nó mais à direita da subarvore à esquerda e retorna ele   
+        temp2 = atual.esq;  // para substituir o que se quer remover.
         while(temp2.dir != null){
             temp1 = temp2;
             temp2 = temp2.dir;
@@ -187,9 +187,9 @@ public class ArvoreBinaria {
         return temp2;
     }
 
-    private void diagramaBarras(No raiz, String espacamento){
+    private void diagramaBarras(No raiz, String espacamento){ // imprime a arvore na representação de diagrama de barras
         if(raiz != null){
-            System.out.print(espacamento + raiz.valor);
+            System.out.print(espacamento + raiz.valor); // imprime o espaçamento, que depende da profundidade na arvore, e o valor do nó
             for(int ii=0; ii < (qntNos*5) - espacamento.length() - Integer.toString(raiz.valor).length(); ii++){
                 if(ii == (qntNos*5) - espacamento.length() - Integer.toString(raiz.valor).length() - 1){
                     System.out.print("-\n");
@@ -197,14 +197,14 @@ public class ArvoreBinaria {
                     System.out.print("-");
                 }
             }
-            diagramaBarras(raiz.esq, espacamento+"    ");
-            diagramaBarras(raiz.dir, espacamento+"    ");
-        }else{
+            diagramaBarras(raiz.esq, espacamento+"    "); // imprime a sub-arvore à esquerda da raiz
+            diagramaBarras(raiz.dir, espacamento+"    "); // imprime a sub-arvore à diretira da raiz
+        }else{ // arvore vazia
             return;
         }
     }
 
-    private void parentesesAninhados(No raiz){
+    private void parentesesAninhados(No raiz){ // imprime a arvore na representação de parenteses aninhados
         Stack<No> pilha = new Stack<>();
         pilha.add(raiz);
         while (!pilha.isEmpty()) {
@@ -226,7 +226,7 @@ public class ArvoreBinaria {
         }
     }
 
-    public void imprimeArvore(int s){
+    public void imprimeArvore(int s){ // imprime a arvore na representação desejada
         if(s == 1){
             diagramaBarras(raiz, "");
         }else{
@@ -235,39 +235,40 @@ public class ArvoreBinaria {
         }
     }
 
-    public boolean ehCompleta(){
-        if(this.raiz == null){
+    public boolean ehCompleta(){ // determina se a arvore é completa ou não
+        if(this.raiz == null){ // arvore vazia
             return true;
         }
-        int altura = calculaAltura(this.raiz);
-        if(Math.pow(2, altura-1) <= qntNos && qntNos <= (Math.pow(2, altura) - 1)){
+        int altura = calculaAltura(this.raiz); // calcula a altura da arvore
+        // se a quantidade de nós estiver nesse intervalo (2^h-1 <= qntNos <= (2^h) - 1), então as folhas da arvore estão no ultimo ou penultimo nivel.
+        if(Math.pow(2, altura-1) <= qntNos && qntNos <= (Math.pow(2, altura) - 1)){ 
             return true;
         }
         return false;
     }
 
-    public boolean ehCheia(){
-        if(this.raiz == null){
+    public boolean ehCheia(){ // determina se a arvore é cheia
+        if(this.raiz == null){ // arvore vazia
             return true;
         }
         Queue<No> fila = new LinkedList<>();
         fila.add(this.raiz);
-        while(!fila.isEmpty()){
+        while(!fila.isEmpty()){ // percorre a arvore
             No temp = fila.peek();
             fila.remove();
-            if (temp.esq == null && temp.dir == null){
+            if (temp.esq == null && temp.dir == null){ // nó folha, continua a busca
                 continue;
             }
-            if (temp.esq == null ^ temp.dir == null){
+            if (temp.esq == null ^ temp.dir == null){ // encontrado um nó que não possui dois filhos
                 return false;
             }
             fila.add(temp.esq);
             fila.add(temp.dir);
         }
-        return true;
+        return true; // todos os nós da arvore (exceto as folhas) possuem dois filhos
     };
 
-    private String preOrdem(No raiz){
+    private String preOrdem(No raiz){ // constroi a String contendo a arvore no percurso em pre-ordem
         this.arvorePreOrdem += raiz.valor + " ";
         if(raiz.esq != null){
             preOrdem(raiz.esq);
@@ -278,22 +279,22 @@ public class ArvoreBinaria {
         return this.arvorePreOrdem;
     }
 
-    public void PosInOrdem(No raiz, int valor, int verif){
+    public void PosInOrdem(No raiz, int valor, int verif){ // determina a posição de cada elemento da arvore no percurso em ordem simetrica
         if(raiz.esq != null){
             PosInOrdem(raiz.esq, valor, verif);
         }
         countInOrdem++;
         raiz.posInOrdem = countInOrdem;
-        if(verif == 2){ // posição
+        if(verif == 2){ // metodo que chamou foi o posicao
             if(raiz.valor == valor){
-                this.posNoInOrdem = raiz.posInOrdem;
+                this.posNoInOrdem = raiz.posInOrdem; // determina a posição de determinado elemento na arvore
             }   
-        }else if(verif == 3){ // enesimo
+        }else if(verif == 3){ // metodo que chamou foi o enesimo
             if(raiz.posInOrdem == valor){
-                this.elemNoInOrdem = raiz.valor;
+                this.elemNoInOrdem = raiz.valor; // determina o elemento que ocupa determinada posição na arvore
             }
-        }else{ // mediana
-            if(qntNos % 2 == 0){
+        }else{ // metodo que chamou foi mediana
+            if(qntNos % 2 == 0){ // quantidade par de nós
                 if(raiz.posInOrdem == qntNos / 2){
                     this.mediana += raiz.valor;
                 }
@@ -302,7 +303,7 @@ public class ArvoreBinaria {
                         this.mediana = raiz.valor;
                     }
                 }
-            }else{
+            }else{ // quantidade impar de nós
                 if(raiz.posInOrdem == ((qntNos / 2) + 1)){
                     this.mediana = raiz.valor;
                 }
@@ -311,27 +312,27 @@ public class ArvoreBinaria {
         if(raiz.dir != null){
             PosInOrdem(raiz.dir, valor, verif);
         }
-        if(countInOrdem == qntNos){
+        if(countInOrdem == qntNos){ // zera o contador das posições
             countInOrdem = 0;
         }
     }
 
     public String pre_ordem(){
-        if(this.arvorePreOrdem.length() != 0){
+        if(this.arvorePreOrdem.length() != 0){ // caso já tenha sido chamado antes, esvazia a String para novas concatenações
             this.arvorePreOrdem = "";
         }
         return preOrdem(raiz);
     }
 
-    public int enesimoElemento(int n){
-        if(raiz == null){
+    public int enesimoElemento(int n){ // retorna o elemento que ocupa a posição n no percuso em ordem simetrica
+        if(raiz == null){ // arvore vazia
             return 0;
         }
         PosInOrdem(this.raiz, n, 3);
         return this.elemNoInOrdem;
     }
 
-    public int posicao(int valor){
+    public int posicao(int valor){ // retorna a posição de valor na arvore em percurso na ordem simetrica
         if(raiz == null){
             return 0;
         }
@@ -339,22 +340,22 @@ public class ArvoreBinaria {
         return this.posNoInOrdem;
     }
 
-    public double mediana(){
-        if(this.mediana != 0){
+    public double mediana(){ // retorna o valor central da arvore
+        if(this.mediana != 0){ // se o metodo já foi chamado antes, a mediana é zerada para novas determinações
            this.mediana = 0;
         }
         PosInOrdem(this.raiz, -1, 4);
         return this.mediana;
     }
 
-    public double media(int elemento){
-        if(raiz == null){
+    public double media(int elemento){ // determina a media dos valores dos nós os quais elemento é a raiz
+        if(raiz == null){ // arvore vazia
             return 0;
         }
         int nos = 0;
         double soma = 0;
         No atual = this.raiz;
-        while(atual.valor != elemento){
+        while(atual.valor != elemento){ // busca para encontrar o elemento
             if(atual != null){
                 if(elemento > atual.valor){
                     atual = atual.dir;
@@ -362,11 +363,11 @@ public class ArvoreBinaria {
                     atual = atual.esq;
                 }
             }
-            if(atual == null){
+            if(atual == null){ // elemento não encontrado
                 return 0;
             }
         }
-        Stack<No> pilha = new Stack<>();
+        Stack<No> pilha = new Stack<>(); // percorre os filhos para pegar os valores e fazer a média
         pilha.push(atual);
         while(!pilha.empty()){
             No temp = pilha.pop();
