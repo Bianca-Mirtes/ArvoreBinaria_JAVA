@@ -45,22 +45,22 @@ public class ArvoreBinaria {
         }
     };
 
-    public int calculaAltura(No raiz){
-        Queue<No> nosPorLevel = new LinkedList<>();
-        int altura = 0;
-        int qntNos = 0;
-        No atual; 
+    private int calculaAltura(No raiz){
         if (raiz == null) {
             return 0;
         }
+        Queue<No> nosPorLevel = new LinkedList<>();
+        int altura = 0;
+        int quantidadeNos = 0;
+        No atual; 
         nosPorLevel.add(raiz);
         while(true){
-            qntNos = nosPorLevel.size();
-            if(qntNos == 0){
+            quantidadeNos = nosPorLevel.size();
+            if(quantidadeNos == 0){
                 return altura;
             }
             altura++;
-            while (qntNos > 0){
+            while (quantidadeNos > 0){
                 atual = nosPorLevel.peek();
                 nosPorLevel.remove();
                 if (atual.esq != null) {
@@ -70,12 +70,12 @@ public class ArvoreBinaria {
                 if (atual.dir != null) {
                     nosPorLevel.add(atual.dir);
                 }
-                qntNos--;
+                quantidadeNos--;
             }
         }
     }
 
-    public No getRaiz() {
+    public No getRaiz() { // O(1)
         return raiz;
     }
 
@@ -113,7 +113,7 @@ public class ArvoreBinaria {
         if(raiz == null){
             return;
         }else{
-            No atual = raiz;
+            No atual = this.raiz;
             while(atual.valor != valor){
                 if(atual != null){
                     if(valor > atual.valor){
@@ -190,8 +190,8 @@ public class ArvoreBinaria {
     private void diagramaBarras(No raiz, String espacamento){
         if(raiz != null){
             System.out.print(espacamento + raiz.valor);
-            for(int ii=0; ii < 36 - espacamento.length() - Integer.toString(raiz.valor).length(); ii++){
-                if(ii == 36 - espacamento.length() - Integer.toString(raiz.valor).length() - 1){
+            for(int ii=0; ii < (qntNos*5) - espacamento.length() - Integer.toString(raiz.valor).length(); ii++){
+                if(ii == (qntNos*5) - espacamento.length() - Integer.toString(raiz.valor).length() - 1){
                     System.out.print("-\n");
                 }else{
                     System.out.print("-");
@@ -204,12 +204,12 @@ public class ArvoreBinaria {
         }
     }
 
-    private void parentesesAninhados(No raiz){ // larguei de mão, consegui o de barras!!!!
+    private void parentesesAninhados(No raiz){
         Stack<No> pilha = new Stack<>();
         pilha.add(raiz);
         while (!pilha.isEmpty()) {
             No atual = pilha.pop();
-            
+
             if (atual.esq == null) {
                 System.out.print("("+atual.valor);
             } else {
@@ -255,7 +255,7 @@ public class ArvoreBinaria {
         while(!fila.isEmpty()){
             No temp = fila.peek();
             fila.remove();
-            if (temp.esq == null && temp.dir == null){ // é uma folha, ignora
+            if (temp.esq == null && temp.dir == null){
                 continue;
             }
             if (temp.esq == null ^ temp.dir == null){
@@ -284,21 +284,21 @@ public class ArvoreBinaria {
         }
         countInOrdem++;
         raiz.posInOrdem = countInOrdem;
-        if(verif == 2){
+        if(verif == 2){ // posição
             if(raiz.valor == valor){
-                posNoInOrdem = raiz.posInOrdem;
+                this.posNoInOrdem = raiz.posInOrdem;
             }   
-        }else if(verif == 3){
+        }else if(verif == 3){ // enesimo
             if(raiz.posInOrdem == valor){
-                elemNoInOrdem = raiz.valor;
+                this.elemNoInOrdem = raiz.valor;
             }
-        }else{
+        }else{ // mediana
             if(qntNos % 2 == 0){
                 if(raiz.posInOrdem == qntNos / 2){
                     this.mediana += raiz.valor;
                 }
                 if(raiz.posInOrdem == (qntNos / 2) + 1){
-                    if(mediana > raiz.valor){
+                    if(this.mediana > raiz.valor){
                         this.mediana = raiz.valor;
                     }
                 }
@@ -340,12 +340,17 @@ public class ArvoreBinaria {
     }
 
     public double mediana(){
-        this.mediana = 0;
+        if(this.mediana != 0){
+           this.mediana = 0;
+        }
         PosInOrdem(this.raiz, -1, 4);
         return this.mediana;
     }
 
     public double media(int elemento){
+        if(raiz == null){
+            return 0;
+        }
         int nos = 0;
         double soma = 0;
         No atual = this.raiz;
