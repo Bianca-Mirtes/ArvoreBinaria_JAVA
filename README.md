@@ -8,7 +8,7 @@
     java App entradas\input1.txt entradas\input2.txt  
 ```
 
-# Saida esperada
+# Saída esperada:
 ```
 A árvore não é cheia
 A árvore é completa
@@ -37,7 +37,7 @@ Chave encontrada
 25 adicionado
 25
 ```
-# Saida do programa
+# Saída do programa:
 ![](src/images/Captura%20de%20tela%202022-11-07%20131440.png)
 
 
