@@ -1,3 +1,12 @@
+## Requisitos:
+* É necessário ter instalado os pacotes essenciais de compilação do Ubuntu e o Java:
+	- Ubuntu build-essential;
+	- Java (JDK);
+
+# Java
+```
+	sudo apt install default-jdk
+```
 # Compilar:
 ```
     javac App.java
@@ -38,7 +47,7 @@ Chave encontrada
 25
 ```
 # Saída do programa:
-![](src/images/Captura%20de%20tela%202022-11-07%20131440.png)
+![](src/images/Captura%20de%20tela%202022-11-07%20231053.png)
 
 
 
