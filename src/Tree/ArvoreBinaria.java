@@ -9,10 +9,8 @@ public class ArvoreBinaria {
     private No raiz = null;     // raiz da arvore
     private int qntNos = 0;     // quantidade de nós da arvore
     private String arvorePreOrdem = ""; // arvore organizada no percurso em pré-ordem
-    private int posNoInOrdem = 0;   // posição de um elemento na arvore no percuso em ordem simetrica
     private int countInOrdem = 0;   // contador para definir a posição de cada nó no percuso em ordem simetrica
-    private int elemNoInOrdem = 0;  // elemento em uma determinada posição da arvore no percuso em ordem simetrica
-    private double mediana = 0;     // valor central da arvore no percuso em ordem simetrica
+    private int mediana = 0;     // valor central da arvore no percuso em ordem simetrica
 
     public ArvoreBinaria(String arvoreInicial){ // responsavel por construir a arvore binaria inicial
         String[] str = arvoreInicial.split(" "); // String contendo a arvore binaria inicial
@@ -198,7 +196,7 @@ public class ArvoreBinaria {
                 }
             }
             diagramaBarras(raiz.esq, espacamento+"    "); // imprime a sub-arvore à esquerda da raiz
-            diagramaBarras(raiz.dir, espacamento+"    "); // imprime a sub-arvore à diretira da raiz
+            diagramaBarras(raiz.dir, espacamento+"    "); // imprime a sub-arvore à direita da raiz
         }else{ // arvore vazia
             return;
         }
@@ -279,42 +277,54 @@ public class ArvoreBinaria {
         return this.arvorePreOrdem;
     }
 
-    public void PosInOrdem(No raiz, int valor, int verif){ // determina a posição de cada elemento da arvore no percurso em ordem simetrica
-        if(raiz.esq != null){
-            PosInOrdem(raiz.esq, valor, verif);
-        }
-        countInOrdem++;
-        raiz.posInOrdem = countInOrdem;
-        if(verif == 2){ // metodo que chamou foi o posicao
-            if(raiz.valor == valor){
-                this.posNoInOrdem = raiz.posInOrdem; // determina a posição de determinado elemento na arvore
-            }   
-        }else if(verif == 3){ // metodo que chamou foi o enesimo
-            if(raiz.posInOrdem == valor){
-                this.elemNoInOrdem = raiz.valor; // determina o elemento que ocupa determinada posição na arvore
-            }
-        }else{ // metodo que chamou foi mediana
-            if(qntNos % 2 == 0){ // quantidade par de nós
-                if(raiz.posInOrdem == qntNos / 2){
-                    this.mediana += raiz.valor;
-                }
-                if(raiz.posInOrdem == (qntNos / 2) + 1){
-                    if(this.mediana > raiz.valor){
-                        this.mediana = raiz.valor;
+    private int inOrdem(No raiz, int valor, int verif){ // determina a posição de cada elemento da arvore no percurso em ordem simetrica
+        Stack<No> pilha = new Stack<>();
+
+        No atual = raiz;
+        while(!pilha.isEmpty() || atual != null){
+            if(atual != null){
+                pilha.push(atual);
+                atual = atual.esq;
+            }else{
+                atual = pilha.pop();
+                countInOrdem++;
+                atual.posInOrdem = countInOrdem;
+                if(verif == 2){ // metodo que chamou foi o posicao
+                    if(atual.valor == valor){
+                        countInOrdem = 0;
+                        return atual.posInOrdem; // retorna a posição de determinado elemento na arvore
+                    }   
+                }else if(verif == 3){ // metodo que chamou foi o enesimo
+                    if(atual.posInOrdem == valor){
+                        countInOrdem = 0;
+                        return atual.valor; // retorna o elemento que ocupa determinada posição na arvore
+                    }
+                }else{ // metodo que chamou foi mediana
+                    if(qntNos % 2 == 0){ // quantidade par de nós
+                        if(atual.posInOrdem == qntNos / 2){
+                            this.mediana += atual.valor;
+                        }
+                        if(atual.posInOrdem == (qntNos / 2) + 1){
+                            if(this.mediana > atual.valor){
+                                this.mediana = atual.valor;
+                                countInOrdem = 0;
+                                return this.mediana;
+                            }
+                            countInOrdem = 0;
+                            return this.mediana;
+                        }
+                    }else{ // quantidade impar de nós
+                        if(atual.posInOrdem == ((qntNos / 2) + 1)){
+                            this.mediana = atual.valor;
+                            countInOrdem = 0;
+                            return this.mediana;
+                        }
                     }
                 }
-            }else{ // quantidade impar de nós
-                if(raiz.posInOrdem == ((qntNos / 2) + 1)){
-                    this.mediana = raiz.valor;
-                }
+                atual = atual.dir;
             }
         }
-        if(raiz.dir != null){
-            PosInOrdem(raiz.dir, valor, verif);
-        }
-        if(countInOrdem == qntNos){ // zera o contador das posições
-            countInOrdem = 0;
-        }
+        return 0;
     }
 
     public String pre_ordem(){
@@ -328,24 +338,21 @@ public class ArvoreBinaria {
         if(raiz == null){ // arvore vazia
             return 0;
         }
-        PosInOrdem(this.raiz, n, 3);
-        return this.elemNoInOrdem;
+        return inOrdem(this.raiz, n, 3);
     }
 
     public int posicao(int valor){ // retorna a posição de valor na arvore em percurso na ordem simetrica
-        if(raiz == null){
+        if(raiz == null){ // arvore vazia
             return 0;
         }
-        PosInOrdem(this.raiz, valor, 2);
-        return this.posNoInOrdem;
+        return inOrdem(this.raiz, valor, 2);
     }
 
-    public double mediana(){ // retorna o valor central da arvore
+    public int mediana(){ // retorna o valor central da arvore
         if(this.mediana != 0){ // se o metodo já foi chamado antes, a mediana é zerada para novas determinações
            this.mediana = 0;
         }
-        PosInOrdem(this.raiz, -1, 4);
-        return this.mediana;
+        return inOrdem(this.raiz, -1, 4);
     }
 
     public double media(int elemento){ // determina a media dos valores dos nós os quais elemento é a raiz
