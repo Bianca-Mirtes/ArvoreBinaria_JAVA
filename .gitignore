@@ -1,0 +1,4 @@
+.vscode/
+bin/
+src/*.class
+src/Tree/*.class

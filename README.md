@@ -14,7 +14,7 @@
 
 # Executar:
 ```
-    java App entradas\input1.txt entradas\input2.txt  
+    java App entradas/input1.txt entradas/input2.txt  
 ```
 
 # Saída esperada:
