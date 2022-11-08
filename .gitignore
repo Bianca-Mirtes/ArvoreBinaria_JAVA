@@ -2,3 +2,4 @@
 bin/
 src/*.class
 src/Tree/*.class
+*.class
