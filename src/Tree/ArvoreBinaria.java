@@ -81,7 +81,6 @@ public class ArvoreBinaria {
     public void inserirABB(int valor){ // insere um novo nó à arvore
         if(raiz == null){ // se true, inicializa a raiz da arvore
             raiz = new No(valor);
-            //qntNos++;
         }else{ // busca o local correto para inserir o novo elemento caso não seja um elemento repetido
             No atual = raiz;
             No anterior = null;
@@ -112,10 +111,8 @@ public class ArvoreBinaria {
             }
             if(valor < anterior.valor){ // insere o novo valor à esquerda
                 anterior.esq = new No(valor);
-                //qntNos++;
             }else{ // insere o novo nó à direita
                 anterior.dir = new No(valor);
-                //qntNos++;
             }
             System.out.println(valor + " adicionado");
             temp1.clear();
@@ -173,7 +170,6 @@ public class ArvoreBinaria {
                     }
                 }
                 System.out.println(valor + " removido");
-                //qntNos--;
                 temp1.clear();
                 temp2.clear();
                 return;
